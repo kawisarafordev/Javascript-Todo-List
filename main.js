@@ -10,9 +10,10 @@ let todos = [];
 function addTodo() {
   let text = todoInput.value.trim();
   if (text !== "") {
-    todos.push({ text: text, done: false }); // Add Array
+    const newTodo = { id: `todo-${Date.now()}`, text: text, done: false };
+    todos.push(newTodo); // Add to Array
+    appendTodoElement(newTodo); // Append new element to the DOM
     todoInput.value = ""; // Clear input
-    renderTodos();
   }
 }
 
@@ -23,37 +24,43 @@ todoInput.addEventListener("keypress", (e) => {
   if (e.key === "Enter") addTodo();
 });
 
-// Step 5: Render Todo List
-function renderTodos() {
-  todoList.innerHTML = ""; // clear list
+// Step 5: Create and Append a single Todo Element
+function appendTodoElement(todo) {
+  const li = document.createElement("li");
+  li.id = todo.id; // Add a unique ID to the li element
 
-  todos.forEach((todo, index) => {
-    let li = document.createElement("li");
+  li.innerHTML = `
+          <span class="${todo.done ? "completed" : ""}"></span>
+          <button class="del-btn">❌</button>
+      `;
+  // Use textContent to prevent XSS attacks
+  li.querySelector("span").textContent = todo.text;
 
-    // Step 6: Mark Todo as Done (Toggle Logic)
-    li.innerHTML = `
-            <span class="${todo.done ? "completed" : ""}"></span>
-            <button class="del-btn">❌</button>
-        `;
-    // Use textContent to prevent XSS attacks
-    li.querySelector("span").textContent = todo.text;
-
-    // Toggle Done State
-    li.querySelector("span").addEventListener("click", (e) => {
-      todos[index].done = !todos[index].done;
-      e.target.classList.toggle("completed");
-    });
-
-    li.querySelector(".del-btn").addEventListener("click", () => {
-      deleteTodo(index);
-    });
-
-    todoList.appendChild(li);
+  // Toggle Done State
+  li.querySelector("span").addEventListener("click", () => {
+    toggleTodo(todo.id);
   });
+
+  li.querySelector(".del-btn").addEventListener("click", () => {
+    deleteTodo(todo.id);
+  });
+
+  todoList.appendChild(li);
+}
+
+// Step 6: Toggle Todo as Done
+function toggleTodo(id) {
+  const todo = todos.find((t) => t.id === id);
+  todo.done = !todo.done;
+
+  const span = document.querySelector(`#${id} span`);
+  span.classList.toggle("completed");
 }
 
 // Step 7: Delete Todo
-function deleteTodo(index) {
-  todos.splice(index, 1); // Delete from Array
-  renderTodos();
+function deleteTodo(id) {
+  todos = todos.filter((todo) => todo.id !== id); // Remove from Array
+
+  const li = document.getElementById(id);
+  li.remove(); // Remove from DOM
 }
