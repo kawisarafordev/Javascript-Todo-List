@@ -21,6 +21,18 @@ List the key features of your project here:
 - **Keyboard Support**: Press `Enter` to quickly add a new task.
 - **Secure Rendering**: Uses `textContent` to prevent XSS attacks when rendering user input.
 
+## Git Branches
+
+This project showcases two development approaches in different Git branches to compare coding techniques:
+
+1.  **Basic Loop Rendering Branch**:
+    -   This approach clears the `innerHTML` and uses a `forEach` loop to re-render the entire list every time a change (add/delete) occurs.
+    -   **Pros**: The code is concise, easy to understand, and great for beginners.
+
+2.  **Optimized DOM Manipulation Branch**:
+    -   Improves performance by adding a unique `id` (using `Date.now()`) to each `<li>` element.
+    -   When a change is made, it uses the DOM API to directly target and manipulate only the specific element involved, avoiding a complete re-render of the list.
+
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
