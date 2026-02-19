@@ -53,14 +53,18 @@ function toggleTodo(id) {
   const todo = todos.find((t) => t.id === id);
   todo.done = !todo.done;
 
-  const span = document.querySelector(`#${id} span`);
-  span.classList.toggle("completed");
+  /*const span = document.querySelector(`#${id} span`);
+  span.classList.toggle("completed");*/
+  // One line
+  document.querySelector(`#${id} span`)?.classList.toggle("completed"); 
 }
 
 // Step 7: Delete Todo
 function deleteTodo(id) {
   todos = todos.filter((todo) => todo.id !== id); // Remove from Array
 
-  const li = document.getElementById(id);
-  li.remove(); // Remove from DOM
+  /*const li = document.getElementById(id);
+  li.remove(); // Remove from DOM*/
+  // One line
+  document.getElementById(id)?.remove(); 
 }
